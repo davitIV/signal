@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var previousUserCount = 0;
+
+            function fetchUsers() {
+                $.ajax({
+                    url: '',
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        $('#user-list').empty();
+                        data.forEach(function(user) {
+                            $('#user-list').append('<li>' + user.name + ' - ' + user.email + '</li>');
+                        });
+
+                        if (data.length > previousUserCount) {
+                            var audio = new Audio("{% static 'audio/son.mp3' %}");
+                            audio.play();
+                        }
+                        previousUserCount = data.length;
+                    }
+                });
+            }
+
+            fetchUsers();
+            setInterval(fetchUsers, 5000); // 5wm
+        });
+    </script>
+</head>
+<body>
+    <h1>User List</h1>
+    <ul id="user-list"></ul>
+</body>
+</html>
